@@ -6,6 +6,7 @@ from dash_labs.plugins import register_page
 import numpy as np
 import pandas as pd
 import pickle
+import sklearn
 
 ## Register the page in dash_labs_plugin
 
@@ -60,7 +61,7 @@ layout = dbc.Container([
                 ),
                 dcc.Input(
                     id='price', type='number', placeholder='Price',  min=0, max= 20, step=1, style = {'width': '100%'},
-                    className='mb-3'
+                    className='mb-3', #value=0
                     
                 ),
                 html.H4(
@@ -68,7 +69,7 @@ layout = dbc.Container([
                 ),
                 dcc.Dropdown(
                     id='month', options=[{'label': i, 'value': i} for i in range(1,13)], style = {'color':'#000000'},
-                    className='mb-3'
+                    className='mb-3', value=1
                 ),
                 html.H4(
                     'Select the year'
@@ -120,7 +121,7 @@ layout = dbc.Container([
                             html.H2("Digital channel probability", className="card-title text-sm-center"),
                                 html.P("This is some card text", className="display-4 text-sm-center",id="card_text3")
                     ]),
-                ], className="card text-white  mb-3 text-sm-center",id='card1', inverse=True
+                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
                 ),
                 dbc.Card([
                     dbc.CardHeader("Prediction", className='text-sm-center'),
@@ -128,7 +129,7 @@ layout = dbc.Container([
                             html.H2("Store channel probability", className="card-title text-sm-center"),
                                 html.P("This is some card text", className="display-4 text-sm-center",id="card_text4")
                     ]),
-                ], className="card text-white  mb-3 text-sm-center",id='card1', inverse=True
+                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
                 ),
                 dbc.Card([
                     dbc.CardHeader("Prediction", className='text-sm-center'),
@@ -136,7 +137,7 @@ layout = dbc.Container([
                             html.H2("Canal predicho", className="card-title text-sm-center"),
                                 html.P("This is some card text", className="display-4 text-sm-center",id="card_text5")
                     ]),
-                ], className="card text-white  mb-3 text-sm-center",id='card1', inverse=True
+                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
                 ),
             ], width=7),
 
@@ -148,59 +149,62 @@ layout = dbc.Container([
     Output('card_text3', 'children'),
     Output('card_text4', 'children'),
     Output('card_text5', 'children'),
-    [Input('model', 'value'), 
-    Input('price', 'value'), 
+    [ Input('price', 'value'), 
     Input('month', 'value'), 
     Input('year', 'value'), 
     Input('age', 'value'), 
     Input('color', 'value'), 
     Input('category', 'value'), 
-    Input('garment', 'value')]
+    Input('garment', 'value'),
+    Input('model', 'value'),
+    ]
 )
-def prediccion_individual(price = 0.049475,month=5,year = 2018, age = 25,colors = 'Red',group_indexes = 'Ladieswear',garments = 'Dresses Ladies', model = 'tree'):
-    if float(price) <0: 
+def prediccion_individual(price:float,month:int,year:int = 2018, age = 25,colors = 'Red',group_indexes = 'Ladieswear',garments = 'Dresses Ladies', model = 'tree'):
+    if price == None: 
         new_price=0 
     else: new_price = price
-    if month <0: 
+    if month == None: 
         new_month=5
     elif  month >12:
         new_month=5
     else: new_month = round(month,0)
-    if year <2018: 
+    if year == None: 
         new_year=2018
     #elif year > 2020: 
     #    new_year=2020
     else: new_year = round(year,0)
-    if age <0: 
+    if age == None: 
         new_age=25
     else: new_age = round(age,0)
     
-    if colors not in list(encoder_colors.keys()):
+    if colors == None:
         new_color = encoder_colors['Unknown']
     else: 
         new_color = encoder_colors[colors]
         
-    if group_indexes not in list(encoder_index_groups.keys()):
+    if group_indexes == None:
         new_index = encoder_index_groups['Ladieswear']
     else: 
         new_index = encoder_index_groups[group_indexes]
     
-    if garments not in list(encoder_garments.keys()):
+    if garments == None:
         new_garment = encoder_garments['Unknown']
     else: 
         new_garment = encoder_garments[garments]
     
     datos = pd.DataFrame(columns = ['price','month','year','age','colors','group_indexes','garments'], data=np.array([new_price,new_month,new_year,new_age,new_color,new_index,new_garment]).reshape(1,-1))
-    if model == 'tree':
+    if model == None:
+        loaded_model = pickle.load(open('/home/crnox95/ds4a_project/data/models/tree_model.sav', 'rb'))
+    elif model == 'tree':
         loaded_model = pickle.load(open('/home/crnox95/ds4a_project/data/models/tree_model.sav', 'rb'))
     else:
-        loaded_model = pickle.load(open('ds4a_project/data/models/rf_model.sav', 'rb'))
+        loaded_model = pickle.load(open('/home/crnox95/ds4a_project/data/models/rf_model.sav', 'rb'))
     probabilities = loaded_model.predict_proba(datos)
     predictions = loaded_model.predict(datos)
-    probabilidad_canaldigital = probabilities[0][0]
-    probabilidad_canalpresencial = probabilities[0][1]
+    probabilidad_canaldigital = round(probabilities[0][0]*100,2)
+    probabilidad_canalpresencial = round(probabilities[0][1]*100,2)
     if predictions == 0:
         clase_predicha = 'Digital Channel'
     else:
         clase_predicha = 'Presential Channel'
-    return probabilidad_canaldigital,probabilidad_canalpresencial, clase_predicha
+    return str(probabilidad_canaldigital) + '%', str(probabilidad_canalpresencial) + '%' , clase_predicha

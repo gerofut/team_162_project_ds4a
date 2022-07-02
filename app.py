@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output, State
 
 # Dash instance declaration
 app = dash.Dash(__name__, plugins=[dl.plugins.pages],
-                external_stylesheets=[dbc.themes.DARKLY],)
+                external_stylesheets=[dbc.themes.LITERA],)
                 
 # Menu  bottom bar
 bottom_bar = dbc.NavbarSimple([
@@ -47,11 +47,11 @@ bottom_bar = dbc.NavbarSimple([
     ],
 
     brand = 'Team 162 - Data Science for All',
-    color = 'danger',
+    color = '#000000',
     dark = True,
     fluid = True,
     className = 'menu',
-    fixed = 'bottom'
+    fixed = 'top'
 )
 
 ########################################################################################
@@ -60,16 +60,16 @@ bottom_bar = dbc.NavbarSimple([
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
     "position": "fixed",
-    "top": 0,
+    "top": 55.5,
     "left": 0,
-    "bottom": 62.5,
+    "bottom": 50.5,
     "width": "16rem",
     "height": "100%",
     "z-index": 1,
     "overflow-x": "hidden",
     "transition": "all 0.5s",
     "padding": "0.5rem 1rem",
-    "background-color": "#151515",
+    "background-color": '#01ACFC',
 }
 
 SIDEBAR_HIDEN = {
@@ -83,7 +83,7 @@ SIDEBAR_HIDEN = {
     "overflow-x": "hidden",
     "transition": "all 0.5s",
     "padding": "0rem 0rem",
-    "background-color": "#151515",
+    "background-color": '#01ACFC',
 }
 
 # the styles for the main content position it to the right of the sidebar and
@@ -93,6 +93,7 @@ CONTENT_STYLE = {
     "margin-left": "18rem",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
+    'margin-top': '3rem',
     "background-color": "dark",
 }
 
@@ -101,16 +102,19 @@ CONTENT_STYLE1 = {
     "margin-left": "2rem",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
+    'margin-top': '3rem',
     "background-color": "dark",
 }
 
 sidebar = html.Div(
     [
         dbc.Collapse([
-        html.H2("Sidemenu", className="display-4"),
-        html.Hr(),
+        html.H2("Sidemenu", className="sidebar-header"),
+        html.Hr(
+            style={'color': '#FFFFFF', 'border-color': '#FFFFFF'}
+        ),
         html.P(
-            "Explore all the features designed by TEAM 162", className="lead"
+            "Explore all the features designed by TEAM 162", className="lead sm-text-center"
         ),
         dbc.DropdownMenu(
         [
@@ -183,4 +187,4 @@ def toggle_sidebar(n, nclick):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True,host='0.0.0.0', port=8050)

@@ -1,11 +1,12 @@
 from doctest import OutputChecker
-from turtle import color
+from turtle import color, width
 import dash
 import pandas as pd
 from dash import html , dcc, callback, Input, Output
 import dash_bootstrap_components as dbc
 from dash_labs.plugins import register_page
 import plotly.express as px
+import seaborn as sns
 
 
 ## Register the page in dash_labs_plugin
@@ -36,7 +37,7 @@ layout = dbc.Container(
         dbc.Row(    #row 1 --> Title
             dbc.Col(
                 [ #col 1
-                html.H1("DATA SCIENCE FOR ALL COLOMBIA", className="display-3 text-sm-center"),
+                html.H1("DATA SCIENCE FOR ALL COLOMBIA", className=" text-sm-center"),
                 
                 ],width= {"size":12, "order":1},
             ),
@@ -45,7 +46,7 @@ layout = dbc.Container(
             dbc.Col([
                 html.Div(
                     [
-                        html.H1('PROJECT TEAM 162', className="display-4 text-sm-center"),
+                        html.H2('PROJECT TEAM 162', className="text-sm-center"),
                         
 
                     ],
@@ -80,19 +81,20 @@ layout = dbc.Container(
 
             )  
         ),
-        dbc.Row(    #row 4 --> Line plot
+        dbc.Row([  #row 4 --> Line plot
         dbc.Col(
             html.Div(
                 dcc.Graph(figure={}, id='line-plot', style= {'backgroundColor': '#000000', 'color': '#000000'} ),className="mb-4"
-                )
-            )
-        ),
-        dbc.Row([    #row 5 --> second line of graph and cards
+                ),width= 6,
+            ),
         dbc.Col(
             html.Div(
                 dcc.Graph(figure={}, id='pie-plot')
                 ),width={"size":6, "order":1},
             ),
+        ]),
+        dbc.Row([    #row 5 --> second line of graph and cards
+
         dbc.Col([
             html.Div([
                 dbc.Card([
@@ -101,7 +103,7 @@ layout = dbc.Container(
                          html.H2("Sales quantity", className="card-title text-sm-center"),
                             html.P("This is some card text", className="display-4 text-sm-center",id="card_text1")
                     ]),
-                ], className="card text-white  mb-3 text-sm-center",id='card1', inverse=True
+                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
                 ),
             ],style={'backgroundColor': '#111111'}),
             html.Div([
@@ -111,7 +113,7 @@ layout = dbc.Container(
                          html.H2("Amount of money", className=" card-title text-sm-center"),
                             html.P("Amount of money", className="display-4 text-sm-center",id="card_text2")
                     ]),
-                ], className="card text-white  mb-3 text-sm-center",id='card2', inverse=True
+                ], className="card text-dark  mb-3 text-sm-center",id='card2', inverse=True
             ),
             ]),
         ],width={"size":6, "order":1}),
@@ -138,8 +140,11 @@ def update_line_plot(start_date, end_date):
     ### Figure 1: line-plot
     fig = px.line(df_filtered, x=df_filtered.index.to_timestamp(), y="count", title='H & M Sales by Month')
     fig.update_layout(title_text='H & M Sales over the time', title_x=0.5)
+    sns.set_style("whitegrid")
     ### Figure 2: pie-plot
-    fig2 = px.pie(df1_filtered.reset_index(),values='count',names='sales_channel_id', title='Sales by Channel')
+    fig2 = px.pie(df1_filtered.reset_index(),values='count',names='sales_channel_id', title='Sales by Channel', hole=.3 )
+    fig2.update_layout(title_text='Sales by channel', title_x=0.5)
+    
     card1 = '{:,}'.format(df_filtered['count'].sum())
     card2 = '${:,}'.format(df2_filtered['price'].sum().round(0))
     
