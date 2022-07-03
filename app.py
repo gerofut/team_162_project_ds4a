@@ -27,23 +27,9 @@ bottom_bar = dbc.NavbarSimple([
     #),
     dbc.Button("Sidemenu", outline=True, color="secondary", className="mr-1", id="btn_sidemenu"),
     dbc.NavItem(dbc.NavLink("Home", href="/")),
-    dbc.DropdownMenu(
-        [
-            
-            dbc.DropdownMenuItem(page['name'], href="/{}".format(page['name']))
-    
-    #navigate trougth pages that are created in pages folder
-
-            for page in dash.page_registry.values()
-            if page['module'] != 'Page not found'
-        ],
-        nav=True,
-        label="GRAPHICS",
-    ), 
 
     #Aditional buttons in sidebar
     dbc.NavItem(dbc.NavLink("About us", href="/about")),
-    dbc.NavItem(dbc.NavLink("Contact us", href="/contact")),
     ],
 
     brand = 'Team 162 - Data Science for All',
@@ -106,40 +92,27 @@ CONTENT_STYLE1 = {
     "background-color": "dark",
 }
 
-sidebar = html.Div(
-    [
+sidebar = html.Div([
         dbc.Collapse([
-        html.H2("Sidemenu", className="sidebar-header"),
+        html.H2("Sidemenu", className="sidebar-header", style={'color': '#ffffff'}),
         html.Hr(
             style={'color': '#FFFFFF', 'border-color': '#FFFFFF'}
         ),
         html.P(
-            "Explore all the features designed by TEAM 162", className="lead sm-text-center"
+            "Explore all the features designed by TEAM 162", className="lead sm-text-center text-white"
         ),
-        dbc.DropdownMenu(
-        [
-            
-            dbc.DropdownMenuItem(page['name'], href="/{}".format(page['name']))
-    
-    #navigate trougth pages that are created in pages folder
+        dbc.Nav([
+            dbc.NavItem(dbc.NavLink("Home", href="/", className="text-white sidebar-link", style={'text-size': '5.5rem'}, active='exact')),
+            dbc.NavItem(dbc.NavLink("Prediction models", href="/prediction", className="sidebar-link text-white",  active='exact')),
+            dbc.NavItem(dbc.NavLink("Categories", href="/Index", className="text-white sidebar-link", style={'text-size': '5.5rem'}, active='exact')),
 
-            for page in dash.page_registry.values()
-            if page['module'] != 'Page not found'
         ],
-        nav=True,
-        label="GRAPHICS",
-        
-    ),
-        dbc.NavItem(dbc.NavLink("Prediction models", href="/prediction"))
-        ],   
 
-
-    id="sidebar",
-    style=SIDEBAR_STYLE,
-    #className='collapse',
-    )
-    ]
-)
+        vertical = True, pills = True, className="nav-pills flex-column",  
+        )],
+        id="sidebar",
+        style=SIDEBAR_STYLE),
+])  
 
 # Layout of the app
 app.layout = dbc.Container(

@@ -84,7 +84,7 @@ layout = dbc.Container(
         dbc.Row([  #row 4 --> Line plot
         dbc.Col(
             html.Div(
-                dcc.Graph(figure={}, id='line-plot', style= {'backgroundColor': '#000000', 'color': '#000000'} ),className="mb-4"
+                dcc.Graph(figure={}, id='line-plot', style= {'backgroundColor': '#000000', 'color': '#000000', 'width': '100%'} ),className="mb-4"
                 ),width= 6,
             ),
         dbc.Col(
@@ -96,17 +96,16 @@ layout = dbc.Container(
         dbc.Row([    #row 5 --> second line of graph and cards
 
         dbc.Col([
-            html.Div([
                 dbc.Card([
                     dbc.CardHeader("Total Sales", className='text-sm-center'),
                     dbc.CardBody([
                          html.H2("Sales quantity", className="card-title text-sm-center"),
                             html.P("This is some card text", className="display-4 text-sm-center",id="card_text1")
                     ]),
-                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
+                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True, 
                 ),
-            ],style={'backgroundColor': '#111111'}),
-            html.Div([
+            ]),
+        dbc.Col([   
                 dbc.Card([
                     dbc.CardHeader("Total Sales", className='text-sm-center'),
                     dbc.CardBody([
@@ -115,7 +114,6 @@ layout = dbc.Container(
                     ]),
                 ], className="card text-dark  mb-3 text-sm-center",id='card2', inverse=True
             ),
-            ]),
         ],width={"size":6, "order":1}),
 
         ]),          
