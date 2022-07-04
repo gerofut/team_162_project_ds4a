@@ -7,12 +7,19 @@ import numpy as np
 import pandas as pd
 import pickle
 import sklearn
+import plotly.express as px
+import base64
 
 ## Register the page in dash_labs_plugin
 
 register_page(__name__, path="/prediction")
 
-## Define the dataframe and prepare the data 
+# ##  Load images
+# ##  digital sales images
+# image_filename = '/home/crnox95/ds4a_project/data/images/digital_sales.png'
+# encoded_image = base64.b64encode(open(image_filename, 'rb').read())
+
+##  presencial sales images
 
 
 ## list of encoders to be used in the prediction function
@@ -56,8 +63,9 @@ layout = dbc.Container([
     ),
     dbc.Row([
             dbc.Col([
+                html.H1('           '),
                 html.H4(
-                    'Select the price'
+                    'Input the price'
                 ),
                 dcc.Input(
                     id='price', type='number', placeholder='Price',  min=0, max= 20, step=1, style = {'width': '100%'},
@@ -65,83 +73,92 @@ layout = dbc.Container([
                     
                 ),
                 html.H4(
-                    'Select the month'
+                    'Inpu the month'
                 ),
                 dcc.Dropdown(
                     id='month', options=[{'label': i, 'value': i} for i in range(1,13)], style = {'color':'#000000'},
                     className='mb-3', value=1
                 ),
                 html.H4(
-                    'Select the year'
+                    'Inpu the year'
                 ),
                 dcc.Dropdown(
                     id='year', options=[{'label': i, 'value': i} for i in range(2018,2022)], style = {'color':'#000000'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Select the customers age'
+                    'Input the customers age'
                 ),
                 dcc.Input(
                     id='age', type='number', placeholder='Age',  min=0, max= 100, step=1, style= {'width': '100%'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Select the color'
+                    'Input the color'
                 ),
                 dcc.Dropdown(
                     id='color', options=[{'label': i, 'value': i} for i in encoder_colors.keys()], style = {'color':'#000000'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Select the category'
+                    'Input the category'
                 ),
                 dcc.Dropdown(
                     id='category', options=[{'label': i, 'value': i} for i in encoder_index_groups.keys()], style = {'color':'#000000'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Select the garment'
+                    'Input the garment'
                 ),
                 dcc.Dropdown(
                     id='garment', options=[{'label': i, 'value': i} for i in encoder_garments.keys()], style = {'color':'#000000'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Select the model to be used'
+                    'Input the model to be used'
                 ),
                 dcc.Dropdown(
                     id='model', options=['Tree decision', 'rf model' ], style = {'color':'#000000'}, className='mb-3'
                 )
 
             ],width=5),
+             dbc.Col([
+                dcc.Graph(figure={},id='graph-prediction', style={'width': '100%'}),
+                # dbc.Card([
+                #     dbc.CardHeader("Prediction", className='text-sm-center'),
+                #         dbc.CardBody([
+                #             html.H2("Canal predicho", className="card-title text-sm-center",id="card_text5"),
+                #             dbc.CardImg(src={}, top=True, style={'width': '35%'},id='channel-img'),
+                #     ]),
+                # ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
+                # ),
+                html.H2("Canal predicho", className="card-title text-sm-center",id="card_text5"),
+                html.Img(src='',  style={'width': '35%', 'margin-left':'auto', 'margin-right':'auto', 'display':'block'},id='channel-img', className='mb-3'),
+            ], width=7),
+
+    ]),
+    dbc.Row([
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader("Prediction", className='text-sm-center'),
                         dbc.CardBody([
-                            html.H2("Digital channel probability", className="card-title text-sm-center"),
-                                html.P("This is some card text", className="display-4 text-sm-center",id="card_text3")
-                    ]),
-                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
-                ),
+                            html.H6("Digital channel probability", className="card-title text-sm-center"),
+                            html.H5("This is some card text", className=" text-sm-center",id="card_text3")
+                        ]),
+                    ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True, 
+                    ),
+                ],width= 6),
+            dbc.Col([
                 dbc.Card([
                     dbc.CardHeader("Prediction", className='text-sm-center'),
                         dbc.CardBody([
-                            html.H2("Store channel probability", className="card-title text-sm-center"),
-                                html.P("This is some card text", className="display-4 text-sm-center",id="card_text4")
-                    ]),
-                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
-                ),
-                dbc.Card([
-                    dbc.CardHeader("Prediction", className='text-sm-center'),
-                        dbc.CardBody([
-                            html.H2("Canal predicho", className="card-title text-sm-center"),
-                                html.P("This is some card text", className="display-4 text-sm-center",id="card_text5")
-                    ]),
-                ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
-                ),
-            ], width=7),
-
-    ])
+                            html.H6("Store channel probability", className="card-title text-sm-center"),
+                            html.H5("This is some card text", className="text-sm-center",id="card_text4")
+                        ]),
+                    ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
+                    ),
+            ]),
+        ]),
 ])
 
 #############################################################################################################################
@@ -149,6 +166,8 @@ layout = dbc.Container([
     Output('card_text3', 'children'),
     Output('card_text4', 'children'),
     Output('card_text5', 'children'),
+    Output('graph-prediction', 'figure'),
+    Output('channel-img', 'src'),
     [ Input('price', 'value'), 
     Input('month', 'value'), 
     Input('year', 'value'), 
@@ -207,4 +226,17 @@ def prediccion_individual(price:float,month:int,year:int = 2018, age = 25,colors
         clase_predicha = 'Digital Channel'
     else:
         clase_predicha = 'Presential Channel'
-    return str(probabilidad_canaldigital) + '%', str(probabilidad_canalpresencial) + '%' , clase_predicha
+
+    ## pie chart
+    probabilites = [round(probabilidad_canaldigital,3),round(probabilidad_canalpresencial,3)]
+    labels = ['Digital Channel','Presential Channel']
+    fig2 = px.pie(values=probabilites ,names=labels, title='Sales by Channel', hole=.3 )
+    fig2.update_layout(title_text='Sales by channel', title_x=0.5, legend_title='Sales Channel' )
+
+    if clase_predicha == 'Digital Channel':
+        encoded_image = base64.b64encode(open('/home/crnox95/ds4a_project/data/images/digital_sales.png', 'rb').read())
+    else:
+        encoded_image = base64.b64encode(open('/home/crnox95/ds4a_project/data/images/presencial_channel.png', 'rb').read())
+    
+    img = 'data:image/png;base64,{}'.format(encoded_image.decode())
+    return str(int(probabilidad_canaldigital)) + '%', str(int(probabilidad_canalpresencial)) + '%' , clase_predicha , fig2, img

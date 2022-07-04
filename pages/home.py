@@ -25,6 +25,7 @@ df.set_index('year_month', inplace=True)
 df1 = pd.read_csv('/home/crnox95/ds4a_project/data/csv/pie_plot_home.csv',sep=',')
 df1['year_month'] = pd.to_datetime(df1['year_month']).dt.to_period('M')
 df1.set_index('year_month', inplace=True)
+df1['sales_channel_id'].replace({1: 'Digital channel', 2: 'Presencial channel'},inplace=True)
 
 ## Card2: amount of money
 df2 = pd.read_csv('/home/crnox95/ds4a_project/data/csv/card2.csv',sep=',')
@@ -122,6 +123,8 @@ layout = dbc.Container(
 )
 
 #############################################################################################################################
+# CALLBACKS
+#############################################################################################################################
 @callback(
     Output(component_id='line-plot', component_property='figure'),
     Output(component_id='pie-plot', component_property='figure'),
@@ -137,12 +140,12 @@ def update_line_plot(start_date, end_date):
     df2_filtered = df2[(df2.index >= start_date) & (df2.index <= end_date)]
     ### Figure 1: line-plot
     fig = px.line(df_filtered, x=df_filtered.index.to_timestamp(), y="count", title='H & M Sales by Month')
-    fig.update_layout(title_text='H & M Sales over the time', title_x=0.5)
-    sns.set_style("whitegrid")
+    fig.update_layout(title_text='H & M Sales over the time', title_x=0.5, xaxis_title='Date', yaxis_title='Sales')
     ### Figure 2: pie-plot
     fig2 = px.pie(df1_filtered.reset_index(),values='count',names='sales_channel_id', title='Sales by Channel', hole=.3 )
-    fig2.update_layout(title_text='Sales by channel', title_x=0.5)
-    
+    fig2.update_layout(title_text='Sales by channel', title_x=0.5, legend_title='Sales Channel' )
+
+
     card1 = '{:,}'.format(df_filtered['count'].sum())
     card2 = '${:,}'.format(df2_filtered['price'].sum().round(0))
     

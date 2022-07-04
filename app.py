@@ -10,7 +10,10 @@ from dash.dependencies import Input, Output, State
 # Dash instance declaration
 app = dash.Dash(__name__, plugins=[dl.plugins.pages],
                 external_stylesheets=[dbc.themes.LITERA],)
-                
+
+# Correlation one image
+#image_correlation = 
+
 # Menu  bottom bar
 bottom_bar = dbc.NavbarSimple([
        ## add the logo
@@ -29,7 +32,7 @@ bottom_bar = dbc.NavbarSimple([
     dbc.NavItem(dbc.NavLink("Home", href="/")),
 
     #Aditional buttons in sidebar
-    dbc.NavItem(dbc.NavLink("About us", href="/about")),
+    dbc.NavItem(dbc.NavLink("About us", href="/About")),
     ],
 
     brand = 'Team 162 - Data Science for All',
@@ -48,7 +51,7 @@ SIDEBAR_STYLE = {
     "position": "fixed",
     "top": 55.5,
     "left": 0,
-    "bottom": 50.5,
+    "bottom": 30,
     "width": "16rem",
     "height": "100%",
     "z-index": 1,
@@ -62,13 +65,13 @@ SIDEBAR_HIDEN = {
     "position": "fixed",
     "top": 0,
     "left": "-16rem",
-    "bottom": 62.5,
+    "bottom": 30,
     "width": "16rem",
     "height": "100%",
     "z-index": 1,
     "overflow-x": "hidden",
     "transition": "all 0.5s",
-    "padding": "0rem 0rem",
+    "padding": "0rem 0rem",     
     "background-color": '#01ACFC',
 }
 
@@ -94,10 +97,14 @@ CONTENT_STYLE1 = {
 
 sidebar = html.Div([
         dbc.Collapse([
-        html.H2("Sidemenu", className="sidebar-header", style={'color': '#ffffff'}),
+
+        #html.H2("Sidemenu", className="sidebar-header", style={'color': '#ffffff'}),
         html.Hr(
             style={'color': '#FFFFFF', 'border-color': '#FFFFFF'}
         ),
+        html.Img(src= app.get_asset_url('c1_logo_tagline.svg'), style={ 'width':'90%'}),
+        html.Hr(
+            style={'color': '#FFFFFF', 'border-color': '#FFFFFF'}),
         html.P(
             "Explore all the features designed by TEAM 162", className="lead sm-text-center text-white"
         ),
@@ -105,11 +112,14 @@ sidebar = html.Div([
             dbc.NavItem(dbc.NavLink("Home", href="/", className="text-white sidebar-link", style={'text-size': '5.5rem'}, active='exact')),
             dbc.NavItem(dbc.NavLink("Prediction models", href="/prediction", className="sidebar-link text-white",  active='exact')),
             dbc.NavItem(dbc.NavLink("Categories", href="/Index", className="text-white sidebar-link", style={'text-size': '5.5rem'}, active='exact')),
+            dbc.NavItem(dbc.NavLink("Colors", href="/colors", className="text-white sidebar-link", style={'text-size': '5.5rem'}, active='exact')),
 
         ],
-
         vertical = True, pills = True, className="nav-pills flex-column",  
-        )],
+        ),
+
+        ],
+ 
         id="sidebar",
         style=SIDEBAR_STYLE),
 ])  
