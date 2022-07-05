@@ -29,6 +29,15 @@ encoded_image3 = base64.b64encode(open(image_filename3, 'rb').read())
 image_filename4 = '/home/crnox95/ds4a_project/data/images/Geronimo.jpeg'
 encoded_image4 = base64.b64encode(open(image_filename4, 'rb').read())
 
+#### Daniel image
+image_filename5 = '/home/crnox95/ds4a_project/data/images/Daniel.jpg'
+encoded_image5 = base64.b64encode(open(image_filename5, 'rb').read())
+
+#### Ariadna image
+image_filename6 = '/home/crnox95/ds4a_project/data/images/Ariadna.jpg'
+encoded_image6 = base64.b64encode(open(image_filename6, 'rb').read())
+
+
 ##### Define the layout of the page
 
 layout = dbc.Container([
@@ -74,6 +83,20 @@ layout = dbc.Container([
         ### Card 3
         dbc.Col([
             dbc.Card([
+                dbc.CardImg(src='data:image/jpeg;base64,{}'.format(encoded_image4.decode()), top=True),
+                dbc.CardBody([
+                html.H4("Geronimo Valencia", className="card-title"),
+                html.P(
+                    "Geologist and GIS specialist with experience in seismology and automating tasks with Python. Data science enthusiasts.",
+                    className="card-text",
+                ),
+                dbc.Button("View linkedin profile", color="primary",href='https://www.linkedin.com/in/geronimo-valencia-hoyos-824478192/'),
+                ]),
+            ],style={"width": "18rem"},
+            ),
+        ]),
+        dbc.Col([
+            dbc.Card([
                 dbc.CardImg(src='data:image/jpeg;base64,{}'.format(encoded_image2.decode()), top=True),
                 dbc.CardBody([
                 html.H4("Ricardo Peña", className="card-title"),
@@ -101,16 +124,30 @@ layout = dbc.Container([
             ],style={"width": "18rem"},
             ),
         ]),
-        dbc.Col([
+         dbc.Col([
             dbc.Card([
-                dbc.CardImg(src='data:image/jpeg;base64,{}'.format(encoded_image4.decode()), top=True),
+                dbc.CardImg(src='data:image/jpeg;base64,{}'.format(encoded_image5.decode()), top=True),
                 dbc.CardBody([
-                html.H4("Geronimo Valencia", className="card-title"),
+                html.H4("Daniel Restrepo Jimenez", className="card-title"),
                 html.P(
-                    "Geologist and GIS specialist with experience in seismology and automating tasks with Python. Data science enthusiasts.",
+                    "M Sc. Industrial Engenieer with experience in data analysis, optimization models and marketing business. Statistics lover",
                     className="card-text",
                 ),
-                dbc.Button("View linkedin profile", color="primary",href='https://www.linkedin.com/in/geronimo-valencia-hoyos-824478192/'),
+                dbc.Button("View linkedin profile", color="primary",href='https://www.linkedin.com/in/daniel-restrepo-jim%C3%A9nez-425439194/'),
+                ]),
+            ],style={"width": "18rem"},
+            ),
+        ]),
+         dbc.Col([
+            dbc.Card([
+                dbc.CardImg(src='data:image/jpeg;base64,{}'.format(encoded_image6.decode()), top=True),
+                dbc.CardBody([
+                html.H4("Ariadna de Avila", className="card-title"),
+                html.P(
+                    "Master student and professional in Industrial Engineering passionate about data analytics and decision making through optimization models, statistical models and machine learning tools.",
+                    className="card-text",
+                ),
+                dbc.Button("View linkedin profile", color="primary",href='https://www.linkedin.com/in/ariadnadeavila/'),
                 ]),
             ],style={"width": "18rem"},
             ),

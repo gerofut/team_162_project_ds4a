@@ -10,7 +10,11 @@ from dash_labs.plugins import register_page
 register_page(__name__, path="/Index")
 
 
-layout = html.Div([
+layout = dbc.Container([
+    html.Div([
+        html.H1("WHICH CATEGORIES ARE MOST SOLD IN H&M", className=" text-sm-center mb-4"),
+    ]),
+    html.Div([
     dcc.Dropdown([
         {"label":"2018","value":2018},
         {"label":"2019","value":2019},
@@ -32,6 +36,7 @@ layout = html.Div([
         ],9,placeholder="Select a month", id='dropdownmes'),
     html.Div(id='dd-output-container'),
     dcc.Graph(figure={},id="graficapie")
+])
 ])
 @callback(
     Output(component_id='graficapie',component_property="figure"),
