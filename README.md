@@ -2,7 +2,7 @@
 ## TEAM 162
 In this project, We will work with a H & M dataset.
 --------------
-This project is built in Dash-Plotly
+This project is built in Dash-Plotly --> you can find it in http://35.223.254.228:8050/prediction
 
 ### 1. Folder structure
 
