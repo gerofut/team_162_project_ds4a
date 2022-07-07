@@ -1,14 +1,29 @@
 import pandas as pd
 import plotly.express as px 
-pie=pd.read_csv('/home/crnox95/ds4a_project/data/csv/piechart.csv')
 import dash
 import dash_bootstrap_components as dbc
 from dash import Dash, dcc, html, Input, Output, callback
 from IPython.display import HTML
 from dash_labs.plugins import register_page
+import pathlib
 
+## funcion to build a relative path
+def get_pandas_data(csv_filename: str) -> pd.DataFrame:
+   '''
+   Load data from /data directory as a pandas DataFrame
+   using relative paths. Relative paths are necessary for
+   data loading to work in Heroku.
+   '''
+   PATH = pathlib.Path(__file__).parent
+   DATA_PATH = PATH.joinpath("../data/csv").resolve()
+   return pd.read_csv(DATA_PATH.joinpath(csv_filename))
+
+
+## Register the page in dash_labs_plugin
 register_page(__name__, path="/Index")
 
+## Define the dataframe and prepare the data for the plot
+pie=get_pandas_data('piechart.csv')
 
 layout = dbc.Container([
     html.Div([
@@ -21,18 +36,18 @@ layout = dbc.Container([
         {"label":"2020","value":2020},
         ],2018,placeholder="Select a year", id='dropdownaño'),
     dcc.Dropdown([
-        {"label":"enero","value":1},
-        {"label":"febrero","value":2},
-        {"label":"marzo","value":3},
-        {"label":"abril","value":4},
-        {"label":"mayo","value":5},
-        {"label":"junio","value":6},
-        {"label":"julio","value":7},
-        {"label":"agosto","value":8},
-        {"label":"septiembre","value":9},
-        {"label":"octubre","value":10},
-        {"label":"noviembre","value":11},
-        {"label":"diciembre","value":12},
+        {"label":"January","value":1},
+        {"label":"February","value":2},
+        {"label":"March","value":3},
+        {"label":"April","value":4},
+        {"label":"May","value":5},
+        {"label":"June","value":6},
+        {"label":"July","value":7},
+        {"label":"August","value":8},
+        {"label":"September","value":9},
+        {"label":"October","value":10},
+        {"label":"November","value":11},
+        {"label":"December","value":12},
         ],9,placeholder="Select a month", id='dropdownmes'),
     html.Div(id='dd-output-container'),
     dcc.Graph(figure={},id="graficapie")

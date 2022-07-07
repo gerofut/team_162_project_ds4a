@@ -101,7 +101,7 @@ layout = dbc.Container([
                 dbc.CardBody([
                 html.H4("Ricardo Peña", className="card-title"),
                 html.P(
-                    "Associate Professor at Universidad de Los Andes / Lown Scholar in Cardiovascular Health, T.H. Chan School of Public Health, Harvard University / #Pharmacology, #Public health, #Education, #Gamification enthusiast",
+                    "Physician scientist interested in cardiovascular pharmacology, aging, public health, scientific literacy and education in STEM",
                     className="card-text",
                 ),
                 dbc.Button("View linkedin profile", color="primary", href='https://www.linkedin.com/in/ricardopena-medicine/'),

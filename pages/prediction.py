@@ -9,6 +9,18 @@ import pickle
 import sklearn
 import plotly.express as px
 import base64
+import pathlib
+
+## funcion to build a relative path
+def get_pickle_data(pickle_model: str):
+   '''
+   Load data from /data directory as a pandas DataFrame
+   using relative paths. Relative paths are necessary for
+   data loading to work in Heroku.
+   '''
+   PATH = pathlib.Path(__file__).parent
+   DATA_PATH = PATH.joinpath("../data/models").resolve()
+   return pickle.load(open(DATA_PATH.joinpath(pickle_model), 'rb'))
 
 ## Register the page in dash_labs_plugin
 
@@ -19,8 +31,9 @@ register_page(__name__, path="/prediction")
 # image_filename = '/home/crnox95/ds4a_project/data/images/digital_sales.png'
 # encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 
-##  presencial sales images
-
+##  function for convert text to number with decimals
+def text_to_number(text):
+    return float(text.replace(',','.'))
 
 ## list of encoders to be used in the prediction function
 
@@ -65,57 +78,57 @@ layout = dbc.Container([
             dbc.Col([
                 html.H1('           '),
                 html.H4(
-                    'Input the price'
+                    'Price'
                 ),
                 dcc.Input(
-                    id='price', type='number', placeholder='Price',  min=0, max= 20, step=1, style = {'width': '100%'},
+                    id='price', type='text', placeholder='Price',  min=0, max= 20, step=1, style = {'width': '100%'},
                     className='mb-3', #value=0
                     
                 ),
                 html.H4(
-                    'Inpu the month'
+                    'Month'
                 ),
                 dcc.Dropdown(
                     id='month', options=[{'label': i, 'value': i} for i in range(1,13)], style = {'color':'#000000'},
                     className='mb-3', value=1
                 ),
                 html.H4(
-                    'Inpu the year'
+                    'Year'
                 ),
                 dcc.Dropdown(
                     id='year', options=[{'label': i, 'value': i} for i in range(2018,2022)], style = {'color':'#000000'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Input the customers age'
+                    'Age'
                 ),
                 dcc.Input(
                     id='age', type='number', placeholder='Age',  min=0, max= 100, step=1, style= {'width': '100%'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Input the color'
+                    'Color'
                 ),
                 dcc.Dropdown(
                     id='color', options=[{'label': i, 'value': i} for i in encoder_colors.keys()], style = {'color':'#000000'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Input the category'
+                    'Category'
                 ),
                 dcc.Dropdown(
                     id='category', options=[{'label': i, 'value': i} for i in encoder_index_groups.keys()], style = {'color':'#000000'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Input the garment'
+                    'Garment'
                 ),
                 dcc.Dropdown(
                     id='garment', options=[{'label': i, 'value': i} for i in encoder_garments.keys()], style = {'color':'#000000'},
                     className='mb-3'
                 ),
                 html.H4(
-                    'Input the model to be used'
+                    'Model'
                 ),
                 dcc.Dropdown(
                     id='model', options=['Tree decision', 'rf model' ], style = {'color':'#000000'}, className='mb-3'
@@ -181,7 +194,11 @@ layout = dbc.Container([
 def prediccion_individual(price:float,month:int,year:int = 2018, age = 25,colors = 'Red',group_indexes = 'Ladieswear',garments = 'Dresses Ladies', model = 'tree'):
     if price == None: 
         new_price=0 
-    else: new_price = price
+    else:
+        try:
+            new_price = float(price) 
+        except:
+            new_price = 0
     if month == None: 
         new_month=5
     elif  month >12:
@@ -213,11 +230,11 @@ def prediccion_individual(price:float,month:int,year:int = 2018, age = 25,colors
     
     datos = pd.DataFrame(columns = ['price','month','year','age','colors','group_indexes','garments'], data=np.array([new_price,new_month,new_year,new_age,new_color,new_index,new_garment]).reshape(1,-1))
     if model == None:
-        loaded_model = pickle.load(open('/home/crnox95/ds4a_project/data/models/tree_model.sav', 'rb'))
+        loaded_model = get_pickle_data('tree_model.sav')
     elif model == 'tree':
-        loaded_model = pickle.load(open('/home/crnox95/ds4a_project/data/models/tree_model.sav', 'rb'))
+        loaded_model = get_pickle_data('tree_model.sav')
     else:
-        loaded_model = pickle.load(open('/home/crnox95/ds4a_project/data/models/rf_model.sav', 'rb'))
+        loaded_model = get_pickle_data('rf_model.sav')
     probabilities = loaded_model.predict_proba(datos)
     predictions = loaded_model.predict(datos)
     probabilidad_canaldigital = round(probabilities[0][0]*100,2)
@@ -225,11 +242,11 @@ def prediccion_individual(price:float,month:int,year:int = 2018, age = 25,colors
     if predictions == 0:
         clase_predicha = 'Digital Channel'
     else:
-        clase_predicha = 'Presential Channel'
+        clase_predicha = 'Physical Channel'
 
     ## pie chart
     probabilites = [round(probabilidad_canaldigital,3),round(probabilidad_canalpresencial,3)]
-    labels = ['Digital Channel','Presential Channel']
+    labels = ['Digital Channel','Physical Channel']
     fig2 = px.pie(values=probabilites ,names=labels, title='Sales by Channel', hole=.3 )
     fig2.update_layout(title_text='Sales by channel', title_x=0.5, legend_title='Sales Channel' )
 

@@ -11,6 +11,9 @@ from dash.dependencies import Input, Output, State
 app = dash.Dash(__name__, plugins=[dl.plugins.pages],
                 external_stylesheets=[dbc.themes.LITERA],)
 
+#Define de server
+server = app.server
+
 # Correlation one image
 #image_correlation = 
 
@@ -110,9 +113,9 @@ sidebar = html.Div([
         ),
         dbc.Nav([
             dbc.NavItem(dbc.NavLink("Home", href="/", className="text-white sidebar-link", style={'text-size': '5.5rem'}, active='exact')),
-            dbc.NavItem(dbc.NavLink("Prediction models", href="/prediction", className="sidebar-link text-white",  active='exact')),
             dbc.NavItem(dbc.NavLink("Categories", href="/Index", className="text-white sidebar-link", style={'text-size': '5.5rem'}, active='exact')),
             dbc.NavItem(dbc.NavLink("Colors", href="/colors", className="text-white sidebar-link", style={'text-size': '5.5rem'}, active='exact')),
+            dbc.NavItem(dbc.NavLink("Prediction models", href="/prediction", className="sidebar-link text-white",  active='exact')),
 
         ],
         vertical = True, pills = True, className="nav-pills flex-column",  

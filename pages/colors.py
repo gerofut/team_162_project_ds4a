@@ -5,12 +5,24 @@ import dash_bootstrap_components as dbc
 from dash_labs.plugins import register_page
 import plotly.express as px
 import datetime
+import pathlib
+
+## funcion to build a relative path
+def get_pandas_data(csv_filename: str) -> pd.DataFrame:
+   '''
+   Load data from /data directory as a pandas DataFrame
+   using relative paths. Relative paths are necessary for
+   data loading to work in Heroku.
+   '''
+   PATH = pathlib.Path(__file__).parent
+   DATA_PATH = PATH.joinpath("../data/csv").resolve()
+   return pd.read_csv(DATA_PATH.joinpath(csv_filename))
 
 ## Register the page in dash_labs_plugin
 register_page(__name__, path="/colors")
 
 ## Define the dataframe and prepare the data for the plot
-colors = pd.read_csv('/home/crnox95/ds4a_project/data/csv/colors.csv',sep=',')
+colors = get_pandas_data('colors.csv')
 
 ## define the layout of the page
 layout = dbc.Container([

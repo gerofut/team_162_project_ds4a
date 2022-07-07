@@ -7,7 +7,18 @@ import dash_bootstrap_components as dbc
 from dash_labs.plugins import register_page
 import plotly.express as px
 import seaborn as sns
+import pathlib
 
+## funcion to build a relative path
+def get_pandas_data(csv_filename: str) -> pd.DataFrame:
+   '''
+   Load data from /data directory as a pandas DataFrame
+   using relative paths. Relative paths are necessary for
+   data loading to work in Heroku.
+   '''
+   PATH = pathlib.Path(__file__).parent
+   DATA_PATH = PATH.joinpath("../data/csv").resolve()
+   return pd.read_csv(DATA_PATH.joinpath(csv_filename))
 
 ## Register the page in dash_labs_plugin
 
@@ -16,19 +27,19 @@ register_page(__name__, path="/")
 ## Define the dataframe and prepare the data for the plot
 
 ## Figure 1: line-plot
-df = pd.read_csv('/home/crnox95/ds4a_project/data/csv/line_plot.csv',sep=',')
+df = get_pandas_data('line_plot.csv')
 df['year_month']=pd.to_datetime(df['year_month']).dt.to_period('M')
 df.rename(columns={'year_month.1':'count'}, inplace=True)
 df.set_index('year_month', inplace=True)
 
 ## Figure 2: pie-plot
-df1 = pd.read_csv('/home/crnox95/ds4a_project/data/csv/pie_plot_home.csv',sep=',')
+df1 = get_pandas_data('pie_plot_home.csv')
 df1['year_month'] = pd.to_datetime(df1['year_month']).dt.to_period('M')
 df1.set_index('year_month', inplace=True)
-df1['sales_channel_id'].replace({1: 'Digital channel', 2: 'Presencial channel'},inplace=True)
+df1['sales_channel_id'].replace({1: 'Digital channel', 2: 'Physical channel'},inplace=True)
 
 ## Card2: amount of money
-df2 = pd.read_csv('/home/crnox95/ds4a_project/data/csv/card2.csv',sep=',')
+df2 = get_pandas_data('card2.csv')
 df2.set_index('year_month', inplace=True)
 
 ## Define the layout of the page
