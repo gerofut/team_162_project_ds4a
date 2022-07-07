@@ -17,3 +17,7 @@ The most important folder is **pages** there, all the pages that we show in our 
 
 ### 2. How to run
 To run this web page you have to run the **app.py**,  It's in the root folder, then you have to access the link.
+
+
+### 3. Models
+All the notebooks where we work our EDA and models are located in the folder **Notebooks**

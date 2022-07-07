@@ -109,20 +109,20 @@ layout = dbc.Container(
 
         dbc.Col([
                 dbc.Card([
-                    dbc.CardHeader("Total Sales", className='text-sm-center'),
+                    dbc.CardHeader("Total Sales", className='text-sm-center text-black'),
                     dbc.CardBody([
-                         html.H2("Sales quantity", className="card-title text-sm-center"),
-                            html.P("This is some card text", className="display-4 text-sm-center",id="card_text1")
+                         html.H2("Sales quantity", className="card-title text-sm-center text-black"),
+                            html.P("This is some card text", className="display-4 text-sm-center text-black",id="card_text1")
                     ]),
                 ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True, 
                 ),
             ]),
         dbc.Col([   
                 dbc.Card([
-                    dbc.CardHeader("Total Sales", className='text-sm-center'),
+                    dbc.CardHeader("Total Sales", className='text-sm-center text-dark'),
                     dbc.CardBody([
-                         html.H2("Amount of money", className=" card-title text-sm-center"),
-                            html.P("Amount of money", className="display-4 text-sm-center",id="card_text2")
+                         html.H2("Amount of money", className=" card-title text-sm-center text-black"),
+                            html.P("Amount of money", className="display-4 text-sm-center text-black",id="card_text2")
                     ]),
                 ], className="card text-dark  mb-3 text-sm-center",id='card2', inverse=True
             ),

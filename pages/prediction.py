@@ -153,20 +153,20 @@ layout = dbc.Container([
     dbc.Row([
             dbc.Col([
                 dbc.Card([
-                    dbc.CardHeader("Prediction", className='text-sm-center'),
+                    dbc.CardHeader("Prediction", className='text-sm-center text-black'),
                         dbc.CardBody([
-                            html.H6("Digital channel probability", className="card-title text-sm-center"),
-                            html.H5("This is some card text", className=" text-sm-center",id="card_text3")
+                            html.H6("Digital channel probability", className="card-title text-sm-center text-black"),
+                            html.H5("This is some card text", className=" text-sm-center text-black",id="card_text3")
                         ]),
                     ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True, 
                     ),
                 ],width= 6),
             dbc.Col([
                 dbc.Card([
-                    dbc.CardHeader("Prediction", className='text-sm-center'),
+                    dbc.CardHeader("Prediction", className='text-sm-center text-black'),
                         dbc.CardBody([
-                            html.H6("Store channel probability", className="card-title text-sm-center"),
-                            html.H5("This is some card text", className="text-sm-center",id="card_text4")
+                            html.H6("Store channel probability", className="card-title text-sm-center text-black"),
+                            html.H5("This is some card text", className="text-sm-center text-black",id="card_text4")
                         ]),
                     ], className="card text-dark  mb-3 text-sm-center",id='card1', inverse=True
                     ),
